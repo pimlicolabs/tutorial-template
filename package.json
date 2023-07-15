@@ -11,7 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "@account-abstraction/contracts": "^0.6.0",
-    "@pimlico/erc20-paymaster": "^0.0.12",
+    "@pimlico/erc20-paymaster": "^0.1.0",
     "ethers": "^5.7.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
