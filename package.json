@@ -5,15 +5,16 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "start": "ts-node-esm index.ts"
+    "start": "tsx index.ts"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@account-abstraction/contracts": "^0.6.0",
-    "@pimlico/erc20-paymaster": "^0.1.0",
-    "ethers": "^5.7.2",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.1.6"
+    "dotenv": "^16.3.1",
+    "permissionless": "^0.0.4",
+    "viem": "^1.13.2"
+  },
+  "devDependencies": {
+    "tsx": "^3.13.0"
   }
 }

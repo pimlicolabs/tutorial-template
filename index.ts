@@ -1,11 +1,7 @@
-import {
-    SimpleAccountFactory__factory,
-    EntryPoint__factory,
-    SimpleAccount__factory,
-    EntryPoint,
-    UserOperationStruct
-} from "@account-abstraction/contracts"
-import { ethers, BigNumber, Wallet } from "ethers"
-import { getERC20Paymaster, ERC20, ERC20__factory } from "@pimlico/erc20-paymaster"
+import { GetUserOperationReceiptReturnType, UserOperation, bundlerActions, getUserOperationHash } from "permissionless"
+import { Address, Hex, concat, createClient, createPublicClient, encodeFunctionData, http } from "viem"
+import { lineaTestnet } from "viem/chains"
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts"
+import { pimlicoBundlerActions, pimlicoPaymasterActions } from "permissionless/actions/pimlico"
 
 console.log("Hello world!")
