@@ -1,11 +1,6 @@
-import {
-  Address,
-  Hex,
-  concatHex,
-  encodeFunctionData,
-  encodePacked,
-  zeroAddress,
-} from "viem";
+import { Address, Hex, concatHex, encodeFunctionData, zeroAddress } from "viem";
+import { InternalTx, encodeMultiSend } from "./multisend";
+import { generateApproveCallData } from "./erc20";
 
 export const SAFE_ADDRESSES_MAP = {
   "1.4.1": {
@@ -121,49 +116,6 @@ const getInitializerCode = async ({
   });
 };
 
-type InternalTx = {
-  to: `0x${string}`;
-  data: `0x${string}`;
-  value: bigint;
-  operation: 0 | 1;
-};
-
-const encodeInternalTransaction = (tx: InternalTx): string => {
-  const encoded = encodePacked(
-    ["uint8", "address", "uint256", "uint256", "bytes"],
-    [
-      tx.operation,
-      tx.to,
-      tx.value,
-      BigInt(tx.data.slice(2).length / 2),
-      tx.data,
-    ]
-  );
-  return encoded.slice(2);
-};
-
-const encodeMultiSend = (txs: InternalTx[]): `0x${string}` => {
-  const data: `0x${string}` = `0x${txs
-    .map((tx) => encodeInternalTransaction(tx))
-    .join("")}`;
-
-  return encodeFunctionData({
-    abi: [
-      {
-        inputs: [
-          { internalType: "bytes", name: "transactions", type: "bytes" },
-        ],
-        name: "multiSend",
-        outputs: [],
-        stateMutability: "payable",
-        type: "function",
-      },
-    ],
-    functionName: "multiSend",
-    args: [data],
-  });
-};
-
 export const enableModuleCallData = (safe4337ModuleAddress: `0x${string}`) => {
   return encodeFunctionData({
     abi: [
@@ -256,51 +208,6 @@ export const getAccountInitCode = async ({
   console.log("CreateProxyWithNonce call data", initCodeCallData);
 
   return concatHex([safeProxyFactoryAddress, initCodeCallData]);
-};
-
-export const generateApproveCallData = (paymasterAddress: Address) => {
-  const approveData = encodeFunctionData({
-    abi: [
-      {
-        inputs: [
-          { name: "_spender", type: "address" },
-          { name: "_value", type: "uint256" },
-        ],
-        name: "approve",
-        outputs: [{ name: "", type: "bool" }],
-        payable: false,
-        stateMutability: "nonpayable",
-        type: "function",
-      },
-    ],
-    args: [
-      paymasterAddress,
-      0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffn,
-    ],
-  });
-
-  return approveData;
-};
-
-export const generateTransferCallData = (to: Address, value: bigint) => {
-  const transferData = encodeFunctionData({
-    abi: [
-      {
-        inputs: [
-          { name: "_to", type: "address" },
-          { name: "_value", type: "uint256" },
-        ],
-        name: "transfer",
-        outputs: [{ name: "", type: "bool" }],
-        payable: false,
-        stateMutability: "nonpayable",
-        type: "function",
-      },
-    ],
-    args: [to, value],
-  });
-
-  return transferData;
 };
 
 export const EIP712_SAFE_OPERATION_TYPE = {

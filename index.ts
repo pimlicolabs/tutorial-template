@@ -4,41 +4,18 @@ import {
   UserOperation,
   bundlerActions,
   getSenderAddress,
-  getUserOperationHash,
-  waitForUserOperationReceipt,
-  GetUserOperationReceiptReturnType,
-  signUserOperationHashWithECDSA,
 } from "permissionless";
-import {
-  pimlicoBundlerActions,
-  pimlicoPaymasterActions,
-} from "permissionless/actions/pimlico";
-import {
-  Address,
-  Hash,
-  concat,
-  createClient,
-  createPublicClient,
-  encodeFunctionData,
-  http,
-  Hex,
-} from "viem";
-import {
-  generatePrivateKey,
-  privateKeyToAccount,
-  signMessage,
-} from "viem/accounts";
-import { lineaTestnet, goerli } from "viem/chains";
+import { pimlicoBundlerActions } from "permissionless/actions/pimlico";
+import { Address, Hash, createClient, createPublicClient, http } from "viem";
+import { privateKeyToAccount } from "viem/accounts";
+import { goerli } from "viem/chains";
 import {
   EIP712_SAFE_OPERATION_TYPE,
   SAFE_ADDRESSES_MAP,
   encodeCallData,
-  generateApproveCallData,
-  generateTransferCallData,
   getAccountInitCode,
-} from "./safeUtils";
-
-console.log("Hello world!");
+} from "./utils/safe";
+import { generateTransferCallData } from "./utils/erc20";
 
 // DEFINE THE CONSTANTS
 const privateKey = "<Your-Private-Key"; // replace this with a private key you generate!
@@ -69,12 +46,6 @@ const bundlerClient = createClient({
   .extend(bundlerActions)
   .extend(pimlicoBundlerActions);
 
-const paymasterClient = createClient({
-  // ⚠️ using v2 of the API ⚠️
-  transport: http(`https://api.pimlico.io/v2/${chain}/rpc?apikey=${apiKey}`),
-  chain: goerli,
-}).extend(pimlicoPaymasterActions);
-
 const publicClient = createPublicClient({
   transport: http("https://rpc.ankr.com/eth_goerli"),
   chain: goerli,
@@ -98,6 +69,7 @@ const submitUserOperation = async (userOperation: UserOperation) => {
 
 const erc20PaymasterAddress = "0xEc43912D8C772A0Eba5a27ea5804Ba14ab502009";
 const usdcTokenAddress = "0x07865c6E87B9F70255377e024ace6630C1Eaa37F";
+// from safe-deployments
 const multiSendAddress = "0x38869bf66a61cF6bDB996A6aE40D5853Fd43B526";
 
 const initCode = await getAccountInitCode({
