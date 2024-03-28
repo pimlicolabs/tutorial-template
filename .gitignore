@@ -1,2 +1,6 @@
 node_modules
 .env
+/.idea/.gitignore
+/.idea/modules.xml
+/.idea/pimlico-tutorial-template.iml
+/.idea/vcs.xml
