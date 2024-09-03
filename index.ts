@@ -1,36 +1,22 @@
 import "dotenv/config"
-import { writeFileSync } from 'fs'
+import { writeFileSync } from "fs"
+import { toSafeSmartAccount } from "permissionless/accounts"
+import { Hex, createPublicClient, getContract, http } from "viem"
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts"
+import { sepolia, baseSepolia } from "viem/chains"
+import { createPimlicoClient } from "permissionless/clients/pimlico"
+import {  createBundlerClient, entryPoint07Address } from "viem/account-abstraction"
+import { createSmartAccountClient } from "permissionless"
+
 import {
-    ENTRYPOINT_ADDRESS_V07, 
-    GetUserOperationReceiptReturnType, 
-    UserOperation,
-    bundlerActions, 
-    createSmartAccountClient, 
-    getAccountNonce, 
-    getSenderAddress, 
-    getUserOperationHash, 
-    signUserOperationHashWithECDSA, 
-    waitForUserOperationReceipt
-} from "permissionless"
-import { 
-    privateKeyToSafeSmartAccount, 
-    privateKeyToSimpleSmartAccount, 
-    signerToSafeSmartAccount 
-} from "permissionless/accounts"
-import { pimlicoBundlerActions, pimlicoPaymasterActions } from "permissionless/actions/pimlico"
-import { createPimlicoBundlerClient, createPimlicoPaymasterClient } from "permissionless/clients/pimlico"
-import { 
-    Address, 
-    Hash, 
-    Hex, 
-    concat, 
-    createClient, 
-    createPublicClient, 
-    encodeFunctionData, 
-    http, 
-    parseAbiItem 
-} from "viem"
-import { generatePrivateKey, privateKeyToAccount, signMessage } from "viem/accounts"
-import { lineaTestnet, polygonMumbai, sepolia } from "viem/chains"
+	getAddress,
+	maxUint256,
+	parseAbi,
+} from "viem";
+import {
+	EntryPointVersion,
+} from "viem/account-abstraction";
+
+import { encodeFunctionData, parseAbiItem } from "viem"
 
 console.log("Hello world!")
