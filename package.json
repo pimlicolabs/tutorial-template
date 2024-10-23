@@ -1,7 +1,7 @@
 {
   "name": "pimlico-tutorial-template",
   "version": "1.0.0",
-  "description": "A template repository for Pimlico tutorials (https://docs.pimlico.io/tutorial)",
+  "description": "A template repository for Pimlico tutorials (https://github.com/Herand19/tutorial-template/tutorial-template.git)",
   "main": "index.ts",
   "type": "module",
   "scripts": {
